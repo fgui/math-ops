@@ -8,10 +8,14 @@
   )
 
 (defn display [{:keys [op1 op2 operator res]}]
-  (clojure.string/join " " (map pprint-keyword [op1 operator op2 "=" res]))
+  [:div (clojure.string/join " " (map pprint-keyword [op1 operator op2 "=" res]))]
   )
 
 (defn main-panel []
   (let [operation (re-frame/subscribe [:operation])]
     (fn []
-      [:div (display @operation)])))
+      [:div
+       (display @operation)
+       [:div "Guess: " [:input {:type :text :size 4}]]
+       [:div [:button "Check"]]
+       ])))
