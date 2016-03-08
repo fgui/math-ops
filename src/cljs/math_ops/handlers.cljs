@@ -9,3 +9,9 @@
    {:operation
     (game/make-operation)
     }))
+
+(re-frame/register-handler
+  :check-guess
+  (fn  [state [_ guess]]
+    (game/check-guess (:operation state) guess)
+    state))

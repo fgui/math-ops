@@ -12,3 +12,6 @@
         op2 (random-0-9)
         res (* op1 op2)]
     (hide-sth (->Operation op1 :* op2 res))))
+
+(defn check-guess [operation guess]
+  (println guess))
