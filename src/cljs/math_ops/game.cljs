@@ -2,7 +2,8 @@
 
 (defrecord Operation [op1 operator op2 res])
 
-(defn hide-sth [operation] (assoc operation (rand-nth  [:op1 :op2 :res]) :?))
+(defn hide-sth [operation]
+  (assoc operation (rand-nth  [:op1 :op2 :res]) :?))
 
 (defn random-0-9 [] (rand-int 10))
 

@@ -8,14 +8,19 @@
 
   :min-lein-version "2.5.3"
 
-  :source-paths ["src/clj"]
+  :source-paths ["src/clj"
+                 "script"
+                 ]
 
   :plugins [[lein-cljsbuild "1.1.1"]
-            [lein-figwheel "0.5.0-2"]]
+            ;;[lein-figwheel "0.5.0-2"]
+            ]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
-  :figwheel {:css-dirs ["resources/public/css"]}
+  :figwheel {:css-dirs ["resources/public/css"]
+             :open-file-command "open-in-editor"
+             }
 
   :cljsbuild {:builds [{:id "dev"
                         :source-paths ["src/cljs"]
