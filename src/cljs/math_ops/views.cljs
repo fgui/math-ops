@@ -1,7 +1,7 @@
 (ns math-ops.views
   (:require [re-frame.core :as re-frame]))
 
-(def string-by-keyword {* "x" :? "?"})
+(def string-by-keyword {* "x" + "+" :? "?"})
 
 (defn pprint-keyword [s]
   (get string-by-keyword s s))
