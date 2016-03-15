@@ -1,4 +1,4 @@
-(ns math-ops.game)
+(ns math-ops.operations)
 
 (defrecord Operation [op1 operator op2 res])
 
@@ -27,7 +27,7 @@
     (invert operation)
     operation))
 
-(defn make-operation []
+(defn make []
   (let [op1 (random-0-9)
         op2 (random-0-9)
         operator (random-operation)

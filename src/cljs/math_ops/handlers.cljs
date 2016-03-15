@@ -1,21 +1,19 @@
 (ns math-ops.handlers
   (:require [re-frame.core :as re-frame]
-            [math-ops.game :as game]
+            [math-ops.operations :as operations]
             ))
+
+(defn new-operation [state]
+  (assoc state :operation (operations/make)))
 
 (re-frame/register-handler
   :initialize-state
   (fn [_ _]
-    {:operation
-     (game/make-operation)
-     }))
-
-(defn new-operation [state]
-  (assoc state :operation (game/make-operation)))
+    (new-operation {})))
 
 (re-frame/register-handler
   :check-guess
   (fn [state [_ guess]]
-    (if (game/correct-guess? (:operation state) guess)
+    (if (operations/correct-guess? (:operation state) guess)
       (new-operation state)
       state)))
