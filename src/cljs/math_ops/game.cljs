@@ -12,12 +12,29 @@
 (defn random-operation []
   (rand-nth operators))
 
+(defn inverse-operator [operator]
+  (let [inverse-operators {+ - * /}]
+    (inverse-operators operator)))
+
+(defn invert [operation]
+  (->Operation (:res operation)
+               (inverse-operator (:operator operation))
+               (:op1 operation)
+               (:op2 operation)))
+
+(defn invert-may-be [operation]
+  (if (rand-nth [true false])
+    (invert operation)
+    operation))
+
 (defn make-operation []
   (let [op1 (random-0-9)
         op2 (random-0-9)
         operator (random-operation)
         res (operator op1 op2)]
-    (hide-sth (->Operation op1 operator op2 res))))
+    (-> (->Operation op1 operator op2 res)
+        (invert-may-be)
+        (hide-sth))))
 
 (defn find-unknown [operation]
   (ffirst
