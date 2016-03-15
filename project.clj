@@ -37,7 +37,14 @@
                                    :output-to "resources/public/js/compiled/app.js"
                                    :optimizations :advanced
                                    :closure-defines {goog.DEBUG false}
-                                   :pretty-print false}}]}
+                                   :pretty-print false}}
 
-  :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
-  )
+                       {:id "browser-test"
+                        :source-paths ["src/cljs" "test"]
+                        :compiler {:output-to "out/browser_tests.js"
+                                   :main 'math-ops.browser
+                                   :optimizations :none}}
+                       ]
+              }
+
+  :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]})
