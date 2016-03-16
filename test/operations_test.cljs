@@ -5,7 +5,7 @@
 
 (def operation ->Operation)
 
-(deftest checking-a-guess-ofr-the-unknown-in-an-operation-is-correct
+(deftest checking-that-a-guess-for-the-unknown-in-an-operation-is-correct
   (is (true? (correct-guess?
                (operation 1 + 3 :?) 4)))
 
