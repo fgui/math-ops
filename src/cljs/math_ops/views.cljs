@@ -8,16 +8,19 @@
   (re-frame/dispatch [:check-guess (int @guess-input)])
   (reset! guess-input "?"))
 
+(defn numeric? [c]
+  (not (js/isNaN c)))
+
 (defn add-char [s c]
-  (apply str (remove #(= % "?") (str s c)))
-  )
+  (if (numeric? c)
+    (apply str (remove #(= % "?") (str s c)))
+    s))
 
 (defn process-key [input-atom key-code]
   (if (= 13 key-code)
     (check input-atom)
     (let [c (char key-code)]
-     (swap! input-atom add-char c)))
-  )
+     (swap! input-atom add-char c))))
 
 (defn unknow-component [display-value]
   (let [input (reagent.ratom/atom display-value)]
