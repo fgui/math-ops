@@ -16,11 +16,17 @@
   (let [inverse-operators {+ - * /}]
     (inverse-operators operator)))
 
+
+(defn invertible? [{:keys [op1 op2 operator]}]
+  (not (and (= operator *) (= op1 0))))
+
 (defn invert [operation]
-  (->Operation (:res operation)
-               (inverse-operator (:operator operation))
-               (:op1 operation)
-               (:op2 operation)))
+  (if (invertible? operation)
+    (->Operation (:res operation)
+                 (inverse-operator (:operator operation))
+                 (:op1 operation)
+                 (:op2 operation))
+    operation))
 
 (defn invert-may-be [operation]
   (if (rand-nth [true false])

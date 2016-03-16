@@ -20,4 +20,11 @@
 
 (deftest inverting-operations
   (is (= (operation 4 - 1 3) (invert (operation 1 + 3 4))))
-  (is (= (operation 15 / 5 3) (invert (operation 5 * 3 15)))))
+  (is (= (operation 15 / 5 3) (invert (operation 5 * 3 15))))
+  (is (= (operation 0 / 3  0) (invert (operation 3 * 0 0))))
+  ;; not invertible operations
+  (is (= (operation 0 * 0  0) (invert (operation 0 * 0 0))))
+  (is (= (operation 0 * 3  0) (invert (operation 0 * 3 0))))
+
+
+  )
