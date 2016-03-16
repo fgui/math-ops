@@ -13,7 +13,7 @@
 
 (defn add-char [s c]
   (if (numeric? c)
-    (apply str (remove #(= % "?") (str s c)))
+    (apply str (remove #{"?"} (str s c)))
     s))
 
 (defn process-key [input-atom key-code]
