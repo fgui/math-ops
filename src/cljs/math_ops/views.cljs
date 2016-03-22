@@ -1,6 +1,8 @@
 (ns math-ops.views
   (:require [re-frame.core :as re-frame]
-            [reagent.core :as reagent]))
+            [reagent.core :as reagent]
+            [timothypratley.reanimated.core :as anim]
+            ))
 
 (def string-by-keyword {* "x" + "+" - "-" / "/" :? "?"})
 
@@ -39,9 +41,18 @@
   [:div (map pprint-keyword [op1 operator op2 "=" res])])
 
 
-(defn main-panel []
+(defn main-panel2 []
   (let [operation (re-frame/subscribe [:operation])]
     (fn []
       [:div
        (display @operation)
+       ])))
+
+(defn main-panel []
+  (let [size (reagent/atom 100)
+        size-spring (anim/spring size)]
+    (fn []
+      [:div {:style {:font-size @size-spring}
+             :on-click #(reset! size 200)}
+       "hi"
        ])))
