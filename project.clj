@@ -3,7 +3,6 @@
                  [org.clojure/clojurescript "1.7.170"]
                  [reagent "0.5.1"]
                  [re-frame "0.6.0"]
-                 [timothypratley/reanimated "0.1.4"]
                  [com.cemerick/piggieback "0.2.1"]
                  [figwheel-sidecar "0.5.0-4"]]
 
