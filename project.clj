@@ -44,6 +44,7 @@
                         :source-paths ["src/cljs" "test"]
                         :compiler {:output-to "out/browser_tests.js"
                                    :main 'math-ops.browser
+                                   :target :nodejs
                                    :optimizations :none}}
                        ]
               }
