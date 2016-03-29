@@ -1,6 +1,15 @@
 (ns math-ops.operations)
 
-(defrecord Operation [op1 operator op2 res])
+(def ^:private operator-description
+  {+ "+"
+   - "-"
+   * "*"
+   / "/"})
+
+(defrecord Operation [op1 operator op2 res]
+  Object
+  (toString [_]
+    (clojure.string/join " " [op1 (operator-description operator) op2 "=" res])))
 
 (def operators [* +])
 
@@ -15,7 +24,6 @@
 (defn inverse-operator [operator]
   (let [inverse-operators {+ - * /}]
     (inverse-operators operator)))
-
 
 (defn invertible? [{:keys [op1 op2 operator]}]
   (not (and (= operator *) (= op1 0))))
