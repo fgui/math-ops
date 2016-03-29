@@ -5,26 +5,18 @@
 
 (def operation ->Operation)
 
-(deftest checking-that-a-guess-for-the-unknown-in-an-operation-is-correct
-  (is (true? (correct-guess?
-               (operation 1 + 3 :?) 4)))
+(deftest operations-tests
+  (testing that-a-guess-for-the-unknown-in-an-operation-is-correct
+    (is (true? (correct-guess? (operation 1 + 3 :?) 4)))
+    (is (false? (correct-guess? (operation 1 * 3 :?) 4)))
+    (is (true? (correct-guess? (operation :? * 3 9) 3)))
+    (is (true? (correct-guess? (operation 2 * :? 16) 8))))
 
-  (is (false? (correct-guess?
-               (operation 1 * 3 :?) 4)))
+  (testing that-invertible-operations-are-inverted-correctly
+    (is (= (operation 4 - 1 3) (invert (operation 1 + 3 4))))
+    (is (= (operation 15 / 5 3) (invert (operation 5 * 3 15))))
+    (is (= (operation 0 / 3 0) (invert (operation 3 * 0 0)))))
 
-  (is (true? (correct-guess?
-                (operation :? * 3 9) 3)))
-
-  (is (true? (correct-guess?
-               (operation 2 * :? 16) 8))))
-
-(deftest inverting-operations
-  (is (= (operation 4 - 1 3) (invert (operation 1 + 3 4))))
-  (is (= (operation 15 / 5 3) (invert (operation 5 * 3 15))))
-  (is (= (operation 0 / 3  0) (invert (operation 3 * 0 0))))
-  ;; not invertible operations
-  (is (= (operation 0 * 0  0) (invert (operation 0 * 0 0))))
-  (is (= (operation 0 * 3  0) (invert (operation 0 * 3 0))))
-
-
-  )
+  (testing that-not-invertible-operations-are-not-inverted
+    (is (= (operation 0 * 0 0) (invert (operation 0 * 0 0))))
+    (is (= (operation 0 * 3 0) (invert (operation 0 * 3 0))))))
