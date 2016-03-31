@@ -6,7 +6,8 @@
 (re-frame/register-handler
   :initialize-state
   (fn [_ _]
-    (operations-guessing/start)))
+    (assoc
+     (operations-guessing/start) :level :max-level)))
 
 (re-frame/register-handler
   :press-key

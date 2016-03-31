@@ -1,4 +1,5 @@
-(ns math-ops.operations)
+(ns math-ops.operations
+  (:require [math-ops.game-config :as config]))
 
 (def ^:private operator-description
   {+ "+"
@@ -11,7 +12,7 @@
   (toString [_]
     (clojure.string/join " " [op1 (operator-description operator) op2 "=" res])))
 
-(def operators [* +])
+(def operators (get-in config/levels [:max-level :operators]))
 
 (defn hide-sth [operation]
   (assoc operation (rand-nth [:op1 :op2 :res]) :?))
@@ -22,8 +23,8 @@
   (rand-nth operators))
 
 (defn inverse-operator [operator]
-  (let [inverse-operators {+ - * /}]
-    (inverse-operators operator)))
+  (let [inverse-operators (get-in config/levels [:max-level :inverse-operators])]
+    (get inverse-operators operator operator)))
 
 (defn invertible? [{:keys [op1 operator]}]
   (not (and (= operator *) (= op1 0))))
