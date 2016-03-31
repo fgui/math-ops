@@ -40,10 +40,10 @@
                                    :closure-defines {goog.DEBUG false}
                                    :pretty-print false}}
 
-                       {:id "browser-test"
+                       {:id "unit-tests"
                         :source-paths ["src/cljs" "test"]
-                        :compiler {:output-to "out/browser_tests.js"
-                                   :main 'math-ops.browser
+                        :compiler {:output-to "out/unit_tests.js"
+                                   :main 'math-ops.unit-tests
                                    :target :nodejs
                                    :optimizations :none}}
                        ]
