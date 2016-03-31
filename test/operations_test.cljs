@@ -13,10 +13,10 @@
     (is (true? (correct-guess? (operation 2 * :? 16) 8))))
 
   (testing that-invertible-operations-are-inverted-correctly
-    (is (= (operation 4 - 1 3) (invert (operation 1 + 3 4))))
-    (is (= (operation 15 / 5 3) (invert (operation 5 * 3 15))))
-    (is (= (operation 0 / 3 0) (invert (operation 3 * 0 0)))))
+    (is (= (operation 4 - 1 3) (invert :max-level (operation 1 + 3 4))))
+    (is (= (operation 15 / 5 3) (invert :max-level (operation 5 * 3 15))))
+    (is (= (operation 0 / 3 0) (invert :max-level (operation 3 * 0 0)))))
 
   (testing that-not-invertible-operations-are-not-inverted
-    (is (= (operation 0 * 0 0) (invert (operation 0 * 0 0))))
-    (is (= (operation 0 * 3 0) (invert (operation 0 * 3 0))))))
+    (is (= (operation 0 * 0 0) (invert :max-level (operation 0 * 0 0))))
+    (is (= (operation 0 * 3 0) (invert :max-level (operation 0 * 3 0))))))

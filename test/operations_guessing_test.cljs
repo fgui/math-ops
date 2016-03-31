@@ -9,11 +9,11 @@
 (deftest operation-guessing
 
   (with-redefs
-   [operations/make (constantly new-operation)]
+    [operations/make (constantly new-operation)]
 
     (testing start
       (testing operationg-guessing-start
-        (let [new-state (start)]
+        (let [new-state (start :max-level)]
           (is (= (:operation new-state) new-operation))
           (is (= (:number-input new-state) "?")))))
 

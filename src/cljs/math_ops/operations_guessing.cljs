@@ -2,8 +2,9 @@
   (:require
     [math-ops.operations :as operations]))
 
-(defn start []
-  {:operation (operations/make)
+(defn start [level]
+  {:level level
+   :operation (operations/make level)
    :number-input "?"})
 
 (defn- numeric? [c]
@@ -14,9 +15,9 @@
     (assoc state :number-input (apply str (remove #{"?"} (str number-input c))))
     state))
 
-(defn- check-input-number [{:keys [operation number-input] :as state}]
+(defn- check-input-number [{:keys [level operation number-input] :as state}]
   (if (operations/correct-guess? operation (int number-input))
-    (start)
+    (start level)
     (assoc state :number-input "?")))
 
 (defn- return-pressed? [key-code]

@@ -12,43 +12,43 @@
   (toString [_]
     (clojure.string/join " " [op1 (operator-description operator) op2 "=" res])))
 
-(def operators (get-in config/levels [:max-level :operators]))
+(defn operators [level] (get-in config/levels [level :operators]))
 
 (defn hide-sth [operation]
   (assoc operation (rand-nth [:op1 :op2 :res]) :?))
 
 (defn random-0-9 [] (rand-int 10))
 
-(defn random-operation []
-  (rand-nth operators))
+(defn random-operation [level]
+  (rand-nth (operators level)))
 
-(defn inverse-operator [operator]
-  (let [inverse-operators (get-in config/levels [:max-level :inverse-operators])]
+(defn inverse-operator [level operator]
+  (let [inverse-operators (get-in config/levels [level :inverse-operators])]
     (get inverse-operators operator operator)))
 
 (defn invertible? [{:keys [op1 operator]}]
   (not (and (= operator *) (= op1 0))))
 
-(defn invert [operation]
+(defn invert [level operation]
   (if (invertible? operation)
     (->Operation (:res operation)
-                 (inverse-operator (:operator operation))
+                 (inverse-operator level (:operator operation))
                  (:op1 operation)
                  (:op2 operation))
     operation))
 
-(defn invert-may-be [operation]
+(defn invert-may-be [level operation]
   (if (rand-nth [true false])
-    (invert operation)
+    (invert level operation)
     operation))
 
-(defn make []
+(defn make [level]
   (let [op1 (random-0-9)
         op2 (random-0-9)
-        operator (random-operation)
+        operator (random-operation level)
         res (operator op1 op2)]
-    (-> (->Operation op1 operator op2 res)
-        (invert-may-be)
+    (->> (->Operation op1 operator op2 res)
+        (invert-may-be level)
         (hide-sth))))
 
 (defn find-unknown [operation]
