@@ -22,7 +22,7 @@
           (is (= (process-input arbitrary-state key-code-for-some-arbitrary-not-number)
                  arbitrary-state))))
 
-      (testing when-a-number-is-pressed-it-gets-added-to-the-number-input
+      (testing when-a-number-is-pressed-the-number-gets-added-to-the-number-input
         (let [key-code-for-3 51]
           (is (= (process-input {:operation :not-used-in-this-test :number-input "?"} key-code-for-3)
                  {:operation :not-used-in-this-test :number-input "3"}))
