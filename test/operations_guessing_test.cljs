@@ -1,8 +1,8 @@
-(ns math-ops.operation-guessing-test
+(ns math-ops.operations-guessing-test
   (:require
     [cljs.test :refer-macros [deftest is testing]]
     [math-ops.operations :as operations]
-    [math-ops.operation-guessing :refer [start process-input]]))
+    [math-ops.operations-guessing :refer [start process-input]]))
 
 (def new-operation (operations/->Operation 15 + 3 :?))
 

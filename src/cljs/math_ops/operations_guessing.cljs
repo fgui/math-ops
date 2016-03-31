@@ -1,4 +1,4 @@
-(ns math-ops.operation-guessing
+(ns math-ops.operations-guessing
   (:require
     [math-ops.operations :as operations]))
 
