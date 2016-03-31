@@ -25,7 +25,7 @@
   (let [inverse-operators {+ - * /}]
     (inverse-operators operator)))
 
-(defn invertible? [{:keys [op1 op2 operator]}]
+(defn invertible? [{:keys [op1 operator]}]
   (not (and (= operator *) (= op1 0))))
 
 (defn invert [operation]
