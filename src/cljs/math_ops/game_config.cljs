@@ -1,4 +1,5 @@
 (ns math-ops.game-config)
 
-(def levels {:max-level {:operators [+ *]
+(def levels {:init-level {:operators [+] :inverse-operators {}}
+             :max-level {:operators [+ *]
                          :inverse-operators {+ - * /}}})

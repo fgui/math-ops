@@ -24,13 +24,14 @@
 
 (defn inverse-operator [level operator]
   (let [inverse-operators (get-in config/levels [level :inverse-operators])]
-    (get inverse-operators operator operator)))
+    (inverse-operators operator)))
 
-(defn invertible? [{:keys [op1 operator]}]
-  (not (and (= operator *) (= op1 0))))
+(defn invertible? [level {:keys [op1 operator]}]
+  (and (contains? (get-in config/levels [level :inverse-operators]) operator)
+       (not (and (= operator *) (= op1 0)))))
 
 (defn invert [level operation]
-  (if (invertible? operation)
+  (if (invertible? level operation)
     (->Operation (:res operation)
                  (inverse-operator level (:operator operation))
                  (:op1 operation)
