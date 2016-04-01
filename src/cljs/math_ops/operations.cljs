@@ -1,5 +1,7 @@
 (ns math-ops.operations
-  (:require [math-ops.game-config :as config]))
+  (:require
+    [math-ops.game-config :as config]
+    [clojure.string :as string]))
 
 (def ^:private operator-description
   {+ "+"
@@ -7,18 +9,17 @@
    * "*"
    / "/"})
 
+(defn- operation->string [{:keys [op1 operator op2 res]}]
+  (string/join " " ["#Operation [" op1 (operator-description operator) op2 "=" res "]"]))
+
 (defrecord Operation [op1 operator op2 res]
   Object
-  (toString [_]
-    (clojure.string/join " " [op1 (operator-description operator) op2 "=" res])))
+  (toString [this] (operation->string this)))
 
 (extend-protocol IPrintWithWriter
   Operation
-  (-pr-writer [{:keys [op1 operator op2 res]} writer opts]
-    (-write writer
-            (clojure.string/join
-             " "
-             ["#Operation [" op1 (operator-description operator) op2 "=" res "]"]))))
+  (-pr-writer [this writer _]
+    (-write writer (operation->string this))))
 
 (defn operators [level] (get-in config/levels [level :operators]))
 
