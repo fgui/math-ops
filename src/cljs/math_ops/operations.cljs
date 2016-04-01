@@ -3,14 +3,15 @@
     [math-ops.game-config :as config]
     [clojure.string :as string]))
 
-(def ^:private operator-description
+(def symbols-description
   {+ "+"
    - "-"
    * "*"
-   / "/"})
+   / "/"
+   :? "?"})
 
 (defn- operation->string [{:keys [op1 operator op2 res]}]
-  (string/join " " ["#Operation [" op1 (operator-description operator) op2 "=" res "]"]))
+  (string/join " " ["#Operation [" op1 (symbols-description operator) op2 "=" res "]"]))
 
 (defrecord Operation [op1 operator op2 res]
   Object
