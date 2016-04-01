@@ -12,6 +12,14 @@
   (toString [_]
     (clojure.string/join " " [op1 (operator-description operator) op2 "=" res])))
 
+(extend-protocol IPrintWithWriter
+  Operation
+  (-pr-writer [{:keys [op1 operator op2 res]} writer opts]
+    (-write writer
+            (clojure.string/join
+             " "
+             ["#Operation [" op1 (operator-description operator) op2 "=" res "]"]))))
+
 (defn operators [level] (get-in config/levels [level :operators]))
 
 (defn hide-sth [operation]
@@ -49,13 +57,13 @@
         operator (random-operation level)
         res (operator op1 op2)]
     (->> (->Operation op1 operator op2 res)
-        (invert-may-be level)
-        (hide-sth))))
+         (invert-may-be level)
+         (hide-sth))))
 
 (defn find-unknown [operation]
   (ffirst
-    (filter #(= :? (second %))
-            operation)))
+   (filter #(= :? (second %))
+           operation)))
 
 (defn substitute-unknown [operation guess]
   (assoc operation (find-unknown operation) guess))
