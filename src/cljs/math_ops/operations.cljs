@@ -31,7 +31,7 @@
 (defn- random-0-9 []
   (rand-int 10))
 
-(defn- random-operation [level]
+(defn- random-operator [level]
   (rand-nth (operators level)))
 
 (defn- level-inverse-operators [level]
@@ -61,7 +61,7 @@
 (defn make [level]
   (let [op1 (random-0-9)
         op2 (random-0-9)
-        operator (random-operation level)
+        operator (random-operator level)
         res (operator op1 op2)]
     (->> (->Operation op1 operator op2 res)
          (invert-may-be level)
