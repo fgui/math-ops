@@ -1,6 +1,6 @@
 (ns math-ops.operations
   (:require
-    [math-ops.game-levels-config :as levels-config]
+    [math-ops.game-levels :as levels]
     [clojure.string :as string]))
 
 (def symbols-description
@@ -22,33 +22,20 @@
   (-pr-writer [this writer _]
     (-write writer (operation->string this))))
 
-(defn- operators [level]
-  (get-in levels-config/levels [level :operators]))
-
 (defn- hide-sth [operation]
   (assoc operation (rand-nth [:op1 :op2 :res]) :?))
 
 (defn- random-0-9 []
   (rand-int 10))
 
-(defn- random-operator [level]
-  (rand-nth (operators level)))
-
-(defn- level-inverse-operators [level]
-  (get-in levels-config/levels [level :inverse-operators]))
-
-(defn- inverse-operator [level operator]
-  (let [inverse-operators (level-inverse-operators level)]
-    (inverse-operators operator)))
-
 (defn invertible? [level {:keys [op1 operator]}]
-  (and (contains? (level-inverse-operators level) operator)
+  (and (levels/allowed-operator? level operator)
        (not (and (= operator *) (= op1 0)))))
 
 (defn- invert [level operation]
   (if (invertible? level operation)
     (->Operation (:res operation)
-                 (inverse-operator level (:operator operation))
+                 (levels/inverse-operator level (:operator operation))
                  (:op1 operation)
                  (:op2 operation))
     operation))
@@ -61,16 +48,14 @@
 (defn make [level]
   (let [op1 (random-0-9)
         op2 (random-0-9)
-        operator (random-operator level)
+        operator (levels/random-operator level)
         res (operator op1 op2)]
     (->> (->Operation op1 operator op2 res)
          (invert-may-be level)
          (hide-sth))))
 
 (defn- find-unknown [operation]
-  (ffirst
-   (filter #(= :? (second %))
-           operation)))
+  (ffirst (filter #(= :? (second %)) operation)))
 
 (defn- substitute-unknown [operation guess]
   (assoc operation (find-unknown operation) guess))
