@@ -1,6 +1,6 @@
 (ns math-ops.operations
   (:require
-    [math-ops.game-config :as config]
+    [math-ops.game-levels-config :as levels-config]
     [clojure.string :as string]))
 
 (def symbols-description
@@ -23,7 +23,7 @@
     (-write writer (operation->string this))))
 
 (defn- operators [level]
-  (get-in config/levels [level :operators]))
+  (get-in levels-config/levels [level :operators]))
 
 (defn- hide-sth [operation]
   (assoc operation (rand-nth [:op1 :op2 :res]) :?))
@@ -35,7 +35,7 @@
   (rand-nth (operators level)))
 
 (defn- level-inverse-operators [level]
-  (get-in config/levels [level :inverse-operators]))
+  (get-in levels-config/levels [level :inverse-operators]))
 
 (defn- inverse-operator [level operator]
   (let [inverse-operators (level-inverse-operators level)]
