@@ -22,25 +22,30 @@
   (-pr-writer [this writer _]
     (-write writer (operation->string this))))
 
-(defn operators [level] (get-in config/levels [level :operators]))
+(defn- operators [level]
+  (get-in config/levels [level :operators]))
 
-(defn hide-sth [operation]
+(defn- hide-sth [operation]
   (assoc operation (rand-nth [:op1 :op2 :res]) :?))
 
-(defn random-0-9 [] (rand-int 10))
+(defn- random-0-9 []
+  (rand-int 10))
 
-(defn random-operation [level]
+(defn- random-operation [level]
   (rand-nth (operators level)))
 
-(defn inverse-operator [level operator]
-  (let [inverse-operators (get-in config/levels [level :inverse-operators])]
+(defn- level-inverse-operators [level]
+  (get-in config/levels [level :inverse-operators]))
+
+(defn- inverse-operator [level operator]
+  (let [inverse-operators (level-inverse-operators level)]
     (inverse-operators operator)))
 
 (defn invertible? [level {:keys [op1 operator]}]
-  (and (contains? (get-in config/levels [level :inverse-operators]) operator)
+  (and (contains? (level-inverse-operators level) operator)
        (not (and (= operator *) (= op1 0)))))
 
-(defn invert [level operation]
+(defn- invert [level operation]
   (if (invertible? level operation)
     (->Operation (:res operation)
                  (inverse-operator level (:operator operation))
@@ -48,7 +53,7 @@
                  (:op2 operation))
     operation))
 
-(defn invert-may-be [level operation]
+(defn- invert-may-be [level operation]
   (if (rand-nth [true false])
     (invert level operation)
     operation))
@@ -62,15 +67,15 @@
          (invert-may-be level)
          (hide-sth))))
 
-(defn find-unknown [operation]
+(defn- find-unknown [operation]
   (ffirst
    (filter #(= :? (second %))
            operation)))
 
-(defn substitute-unknown [operation guess]
+(defn- substitute-unknown [operation guess]
   (assoc operation (find-unknown operation) guess))
 
-(defn correct? [{:keys [res op1 op2 operator]}]
+(defn- correct? [{:keys [res op1 op2 operator]}]
   (= res (operator op1 op2)))
 
 (defn correct-guess? [operation guess]
