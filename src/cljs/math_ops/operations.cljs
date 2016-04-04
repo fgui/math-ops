@@ -6,7 +6,7 @@
 (def symbols-description
   {+ "+"
    - "-"
-   * "*"
+   * "x"
    / "/"
    :? "?"})
 
