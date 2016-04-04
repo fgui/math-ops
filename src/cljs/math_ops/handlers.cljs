@@ -6,9 +6,14 @@
 (re-frame/register-handler
   :initialize-state
   (fn [_ _]
-    (operations-guessing/start :max-level)))
+    (assoc
+     (operations-guessing/start :max-level)
+     :current-level :max-level)))
 
 (re-frame/register-handler
   :press-key
   (fn [state [_ key-code]]
-    (operations-guessing/process-input state key-code)))
+    (merge
+     state
+     (operations-guessing/process-input state key-code)
+     )))

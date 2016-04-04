@@ -1,9 +1,12 @@
-(ns math-ops.game-levels)
+(ns math-ops.game-levels
+  (:refer-clojure :exclude [name]))
 
 (def ^:private levels
-  {:init-level {:operators [+]
+  {:init-level {:name "1"
+                :operators [+]
                 :inverse-operators {}}
-   :max-level {:operators [+ *]
+   :max-level {:name "max"
+               :operators [+ *]
                :inverse-operators {+ - * /}}})
 
 (defn- operators [level]
@@ -20,3 +23,6 @@
 
 (defn allowed-operator? [level operator]
   (contains? (inverse-operators level) operator))
+
+(defn name [level]
+  (get-in levels [level :name]))

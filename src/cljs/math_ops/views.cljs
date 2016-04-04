@@ -1,5 +1,6 @@
 (ns math-ops.views
   (:require
+    [math-ops.game-levels :as game-levels]
     [re-frame.core :as re-frame]
     [math-ops.operations :refer [symbols-description]]))
 
@@ -8,6 +9,11 @@
     (fn []
       [:span.unknown {:style {:margin "5px"}}
        @number-input])))
+
+(defn level-component []
+  (let [current-level (re-frame/subscribe [:current-level])]
+    (fn []
+      [:div (str "level: " (game-levels/name @current-level))])))
 
 (defn display-symbol [s]
   (let [display-value (get symbols-description s s)]
@@ -20,4 +26,4 @@
 
 (defn main-panel []
   (let [operation (re-frame/subscribe [:operation])]
-    (fn [] [:div (display @operation)])))
+    (fn [] [:div (display @operation) [level-component]])))

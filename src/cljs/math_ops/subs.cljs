@@ -8,6 +8,11 @@
     (reaction (:operation @state))))
 
 (re-frame/register-sub
-  :number-input
-  (fn [state]
-    (reaction (:number-input @state))))
+ :number-input
+ (fn [state]
+   (reaction (:number-input @state))))
+
+(re-frame/register-sub
+ :current-level
+ (fn [state]
+   (reaction (:current-level @state))))
