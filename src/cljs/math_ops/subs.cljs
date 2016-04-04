@@ -2,17 +2,14 @@
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [re-frame.core :as re-frame]))
 
-(re-frame/register-sub
-  :operation
-  (fn [state]
-    (reaction (:operation @state))))
+(defn react-to
+  ([react-key] (react-to react-key react-key))
+  ([react-key state-key]
+   (re-frame/register-sub
+    react-key
+    (fn [state]
+      (reaction (state-key @state))))))
 
-(re-frame/register-sub
- :number-input
- (fn [state]
-   (reaction (:number-input @state))))
-
-(re-frame/register-sub
- :current-level
- (fn [state]
-   (reaction (:current-level @state))))
+(react-to :operation)
+(react-to :number-input)
+(react-to :current-level)
