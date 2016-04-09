@@ -11,9 +11,23 @@
      :current-level :max-level)))
 
 (re-frame/register-handler
-  :press-key
-  (fn [state [_ key-code]]
+ :press-key
+ (fn [state [_ key-code]]
+   (merge
+    state
+    (operations-guessing/process-input state key-code)
+    )))
+
+(re-frame/register-handler
+ :select-level
+ (fn [state [_ key-level]]
+   (->
+    state
+    (assoc
+     :current-level
+     key-level
+     )
     (merge
-     state
-     (operations-guessing/process-input state key-code)
-     )))
+     (operations-guessing/start key-level)
+     )
+    )))
