@@ -16,24 +16,33 @@
       [:div (str "level: " (game-levels/name @current-level))])))
 
 (defn level-selector [[k description]]
-  [:a {:key k
-       :on-click #(re-frame/dispatch [:select-level k])}
-   description])
+  ^{:key k} [:a {:on-click #(re-frame/dispatch [:select-level k])} description])
 
 (defn level-selection-component []
   [:div (map level-selector (game-levels/available-levels))])
 
-(defn display-symbol [s]
+(defn display-known-symbol [k display-value]
+  ^{:key k} [:span.known {:style {:margin "5px"}} display-value])
+
+(defn display-unknown-symbol []
+  ^{:key :unknown-symbol} [unknow-component])
+
+(defn display-symbol [k s]
   (let [display-value (get symbols-description s s)]
     (if (= :? s)
-      [unknow-component]
-      [:span.known {:style {:margin "5px"}} display-value])))
+      (display-unknown-symbol)
+      (display-known-symbol k display-value))))
 
 (defn display [{:keys [op1 op2 operator res]}]
-  [:div (map display-symbol [op1 operator op2 "=" res])])
+  [:div
+   (map display-symbol
+        [:op1 :operator :op2 :equal-symbol :res]
+        [op1 operator op2 "=" res])])
 
 (defn main-panel []
   (let [operation (re-frame/subscribe [:operation])]
-    (fn [] [:div (display @operation)
-            [level-component]
-            [level-selection-component]])))
+    (fn []
+      [:div
+       (display @operation)
+       [level-component]
+       [level-selection-component]])))
