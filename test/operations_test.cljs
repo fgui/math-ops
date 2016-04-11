@@ -18,5 +18,7 @@
     (is (= (operation 0 / 3 0) (invert :max-level (operation 3 * 0 0)))))
 
   (testing that-not-invertible-operations-are-not-inverted
-    (is (= (operation 0 * 0 0) (invert :max-level (operation 0 * 0 0))))
-    (is (= (operation 0 * 3 0) (invert :max-level (operation 0 * 3 0))))))
+    (let [some-non-invertible-operation (operation 0 * 0 0)
+          another-non-invertible-operation (operation 0 * 3 0)]
+      (is (= some-non-invertible-operation (invert :max-level some-non-invertible-operation)))
+      (is (= another-non-invertible-operation (invert :max-level another-non-invertible-operation))))))
