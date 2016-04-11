@@ -28,5 +28,4 @@
   (get-in levels [level :name]))
 
 (defn available-levels []
-  (map (juxt #(first %) #(-> % second :name))  levels)
-  )
+  (map (juxt #(first %) #(-> % second :name)) levels))
