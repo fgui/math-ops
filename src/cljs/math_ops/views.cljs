@@ -17,15 +17,11 @@
 
 (defn level-selector [[k description]]
   [:a {:key k
-       :on-click #(re-frame/dispatch [:select-level k])
-       } description]
-  )
+       :on-click #(re-frame/dispatch [:select-level k])}
+   description])
 
 (defn level-selection-component []
-  [:div
-   ;;(level-selector [:a "hola"])
-   (map level-selector (game-levels/available-levels))
-   ])
+  [:div (map level-selector (game-levels/available-levels))])
 
 (defn display-symbol [s]
   (let [display-value (get symbols-description s s)]
