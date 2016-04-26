@@ -11,27 +11,27 @@
   (with-redefs
     [operations/make (constantly new-operation)]
 
-    (testing start
-      (testing operationg-guessing-start
+    (testing "start"
+      (testing "operation guessing at start"
         (let [new-state (start :max-level)]
           (is (= (:operation new-state) new-operation))
           (is (= (:number-input new-state) "?")))))
 
-    (testing processing-user-input
-      (testing when-not-a-number-is-pressed-the-state-remains-unaltered
+    (testing "processing user input"
+      (testing "when not a number is pressed the state remains unaltered"
         (let [arbitrary-state {:operation :not-used-in-this-test :number-input "?"}
               key-code-for-some-arbitrary-not-number 103
               new-state (process-input arbitrary-state key-code-for-some-arbitrary-not-number)]
           (is (= new-state arbitrary-state))))
 
-      (testing when-a-number-is-pressed-the-number-gets-added-to-the-number-input
+      (testing "when a number is pressed the number gets added to the number input"
         (let [key-code-for-3 51]
           (let [new-state (process-input {:operation :not-used-in-this-test :number-input "?"} key-code-for-3)]
             (is (= (:number-input new-state) "3")))
           (let [new-state (process-input {:operation :not-used-in-this-test :number-input "56"} key-code-for-3)]
             (is (= (:number-input new-state) "563")))))
 
-      (testing when-enter-is-pressed-and-the-guess-is-wrong-the-guessing-restarts-keeping-the-same-operation
+      (testing "when enter is pressed and the guess is wrong the guessing restarts keeping the same operation"
         (let [key-code-for-enter 13
               arbitrary-operation (operations/->Operation 14 - :? 9)
               wrong-guess "8"
@@ -39,7 +39,7 @@
           (is (= (:operation new-state) arbitrary-operation))
           (is (= (:number-input new-state) "?"))))
 
-      (testing when-enter-is-pressed-and-the-guess-is-right-the-guessing-restarts-with-a-new-operation
+      (testing "when enter is pressed and the guess is right the guessing restarts with a new operation"
         (let [key-code-for-enter 13
               arbitrary-operation (operations/->Operation 8 + :? 9)
               right-guess "1"
