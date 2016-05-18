@@ -18,8 +18,11 @@
 (defn level-selector [[k description]]
   ^{:key k} [:a {:on-click #(re-frame/dispatch [:select-level k])} description])
 
+(defn seq-join [separator coll]
+  (drop 1 (interleave (repeat separator) coll)))
+
 (defn level-selection-component []
-  [:div (map level-selector (game-levels/available-levels))])
+  [:div (seq-join \space (map level-selector (game-levels/available-levels)))])
 
 (defn display-known-symbol [k display-value]
   ^{:key k} [:span.known {:style {:margin "5px"}} display-value])
