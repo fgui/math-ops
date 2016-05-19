@@ -23,6 +23,13 @@ lein clean
 lein cljsbuild once min
 ```
 
+## Run tests
+
+```
+lein doo node unit-tests
+```
+[Running cljs.test tests on node.js using doo and karma](http://garajeando.blogspot.com.es/2016/04/running-cljstest-tests-on-nodejs-using.html)
+
 ## TODO
 
 - Make it work offline
