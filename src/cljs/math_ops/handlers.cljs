@@ -6,9 +6,8 @@
 (re-frame/register-handler
   :initialize-state
   (fn [_ _]
-    (assoc
-      (operations-guessing/start :max-level)
-      :current-level :max-level)))
+    (operations-guessing/start-new-guessing {:current-level :max-level})
+    ))
 
 (re-frame/register-handler
   :press-key
@@ -22,4 +21,4 @@
     (->
       state
       (assoc :current-level key-level)
-      (merge (operations-guessing/start key-level)))))
+      operations-guessing/start-new-guessing)))

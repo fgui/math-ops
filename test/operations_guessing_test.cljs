@@ -2,7 +2,7 @@
   (:require
    [cljs.test :refer-macros [deftest is testing]]
    [math-ops.operations :as operations]
-   [math-ops.operations-guessing :refer [start process-input]]))
+   [math-ops.operations-guessing :refer [start-new-guessing process-input]]))
 
 (def new-operation (operations/->Operation 15 + 3 :?))
 
@@ -13,7 +13,7 @@
 
     (testing "start"
       (testing "operation guessing at start"
-        (let [new-state (start :max-level)]
+        (let [new-state (start-new-guessing {:current-level :max-level})]
           (is (= (:operation new-state) new-operation))
           (is (= (:number-input new-state) "?")))))
 
@@ -45,4 +45,15 @@
               right-guess "1"
               new-state (process-input {:operation arbitrary-operation :number-input right-guess} key-code-for-enter)]
           (is (= (:operation new-state) new-operation))
-          (is (= (:number-input new-state) "?")))))))
+          (is (= (:number-input new-state) "?"))))
+
+      (testing "when enter is pressed the guessing is recorded in the history"
+        (let [key-code-for-enter 13
+              arbitrary-operation (operations/->Operation 8 + :? 9)
+              guess "1"
+              current-guessing {:operation arbitrary-operation :number-input guess}
+              current-state (assoc current-guessing :current-level :max-level)
+              new-state (process-input current-state key-code-for-enter)]
+          (is (= (:history new-state) {:max-level  [current-guessing]}))
+          ))
+      )))

@@ -1,10 +1,12 @@
 (ns math-ops.operations-guessing
   (:require
-    [math-ops.operations :as operations]))
+   [math-ops.operations :as operations]
+   [math-ops.history :as history]))
 
-(defn start [level]
-  {:operation (operations/make level)
-   :number-input "?"})
+(defn start-new-guessing [{:keys [current-level] :as state}]
+  (merge state
+         {:operation (operations/make current-level)
+          :number-input "?"}))
 
 (defn- numeric? [c]
   (not (js/isNaN c)))
@@ -14,10 +16,17 @@
     (assoc state :number-input (apply str (remove #{"?"} (str number-input c))))
     state))
 
-(defn- check-input-number [{:keys [current-level operation number-input] :as state}]
-  (if (operations/correct-guess? operation (int number-input))
-    (start current-level)
-    (assoc state :number-input "?")))
+(defn- correct-guess? [{:keys [operation number-input]}]
+  (operations/correct-guess? operation (int number-input)))
+
+(defn- retry-current-guessing [state]
+  (assoc state :number-input "?"))
+
+(defn- check-input-number [state]
+  (let [state (history/record state)]
+    (if (correct-guess? state)
+      (start-new-guessing state)
+      (retry-current-guessing state))))
 
 (defn- return-pressed? [key-code]
   (= 13 key-code))
