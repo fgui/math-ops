@@ -7,8 +7,8 @@
 
 (def new-operation (operations/->Operation 15 + 3 :?))
 
+;; extract to a generalized make-stub function or macro
 (def times (atom [10 12]))
-
 (defn stubbed-current-time-ms []
   (let [t (first @times)]
     (swap! times rest)
