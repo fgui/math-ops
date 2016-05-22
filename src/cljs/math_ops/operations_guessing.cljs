@@ -1,12 +1,19 @@
 (ns math-ops.operations-guessing
   (:require
    [math-ops.operations :as operations]
-   [math-ops.history :as history]))
+   [math-ops.history :as history]
+   [math-ops.clock :as clock]))
 
 (defn start-new-guessing [{:keys [current-level] :as state}]
   (merge state
          {:operation (operations/make current-level)
           :number-input "?"}))
+
+(defn start-new-guessing-new [{:keys [current-level] :as state}]
+  {:current-level current-level
+   :operation (operations/make current-level)
+   :number-input "?"
+   :time-stamp (clock/current-time-ms)})
 
 (defn- numeric? [c]
   (not (js/isNaN c)))

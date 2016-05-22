@@ -2,14 +2,22 @@
   (:require
     [cljs.test :refer-macros [deftest is testing]]
     [math-ops.operations :as operations]
-    [math-ops.operations-guessing :refer [start-new-guessing process-input]]))
+    [math-ops.operations-guessing :refer [start-new-guessing-new start-new-guessing process-input]]
+    [math-ops.clock :as clock]))
 
 (def new-operation (operations/->Operation 15 + 3 :?))
 
-(deftest operation-guessing
+(def times (atom [10 12]))
 
+(defn stubbed-current-time-ms []
+  (let [t (first @times)]
+    (swap! times rest)
+    t))
+
+(deftest operation-guessing
   (with-redefs
-    [operations/make (constantly new-operation)]
+    [operations/make (constantly new-operation)
+     clock/current-time-ms stubbed-current-time-ms]
 
     (testing "start"
       (testing "operation guessing at start"
@@ -47,14 +55,26 @@
           (is (= (:operation new-state) new-operation))
           (is (= (:number-input new-state) "?"))))
 
-      (testing "when enter is pressed the guessing is recorded in the history"
-        (let [key-code-for-enter 13
-              arbitrary-operation (operations/->Operation 8 + :? 9)
-              guess "1"
-              current-state {:operation arbitrary-operation
-                             :number-input guess
-                             :current-level :max-level}
-              new-state (process-input current-state key-code-for-enter)]
-          (is (= (:history new-state) [{:current-level :max-level
-                                        :operation arbitrary-operation
-                                        :number-input guess}])))))))
+
+      ;(testing "when enter is pressed the guessing is recorded in the history"
+      ;  (let [key-code-for-enter 13
+      ;        arbitrary-operation (operations/->Operation 8 + :? 9)
+      ;        guess "1"
+      ;        current-state {:operation arbitrary-operation
+      ;                       :number-input guess
+      ;                       :current-level :max-level}
+      ;        new-state (process-input current-state key-code-for-enter)]
+      ;    (is (= (:history new-state) [{:current-level :max-level
+      ;                                  :operation arbitrary-operation
+      ;                                  :number-input guess}])))))
+
+
+      (testing "start"
+        (testing "operation guessing at start"
+          (let [guessing (start-new-guessing-new {:current-level :max-level})]
+            (is (= guessing {:current-level :max-level
+                             :operation new-operation
+                             :number-input "?"
+                             :time-stamp 10})))))
+
+      )))
