@@ -2,7 +2,7 @@
   (:require
     [cljs.test :refer-macros [deftest is testing]]
     [math-ops.operations :as operations]
-    [math-ops.operations-guessing :refer [start-new-guessing-new start-new-guessing process-input]]
+    [math-ops.operations-guessing :refer [process-input-new start-new-guessing-new start-new-guessing process-input]]
     [math-ops.clock :as clock]))
 
 (def new-operation (operations/->Operation 15 + 3 :?))
@@ -68,13 +68,47 @@
       ;                                  :operation arbitrary-operation
       ;                                  :number-input guess}])))))
 
+      )
 
-      (testing "start"
-        (testing "operation guessing at start"
-          (let [guessing (start-new-guessing-new {:current-level :max-level})]
-            (is (= guessing {:current-level :max-level
-                             :operation new-operation
-                             :number-input "?"
-                             :time-stamp 10})))))
+    (testing "start"
+      (testing "operation guessing at start"
+        (let [guessing (start-new-guessing-new {:current-level :max-level})]
+          (is (= guessing {:current-level :max-level
+                           :operation new-operation
+                           :number-input "?"
+                           :init-time 10})))))
 
-      )))
+    (testing "processing user input"
+      (testing "when not a number is pressed the state remains unaltered"
+        (let [arbitrary-state {:guessing {:number-input "?"
+                                          :operation :not-used-in-this-test
+                                          :current-level :not-used-in-this-test
+                                          :init-time :not-used-in-this-test}
+                               :history :not-used-in-this-test}
+              key-code-for-some-arbitrary-not-number 103
+              new-state (process-input-new arbitrary-state key-code-for-some-arbitrary-not-number)]
+          (is (= new-state arbitrary-state))))
+
+
+      (testing "when a number is pressed the number gets added to the number input"
+        (let [key-code-for-3 51]
+          (let [new-state (process-input-new
+                            {:guessing {:number-input "?"
+                                        :operation :not-used-in-this-test
+                                        :current-level :not-used-in-this-test
+                                        :init-time :not-used-in-this-test}
+                             :history :not-used-in-this-test}
+                            key-code-for-3)]
+            (is (= (get-in new-state [:guessing :number-input]) "3")))
+          (let [new-state (process-input-new
+                            {:guessing {:number-input "56"
+                                        :operation :not-used-in-this-test
+                                        :current-level :not-used-in-this-test
+                                        :init-time :not-used-in-this-test}
+                             :history :not-used-in-this-test}
+                            key-code-for-3)]
+            (is (= (get-in new-state [:guessing :number-input]) "563")))))
+
+      )
+
+    ))
