@@ -10,10 +10,10 @@
           :number-input "?"}))
 
 (defn start-new-guessing-new [{:keys [current-level] :as state}]
-  {:current-level current-level
-   :operation (operations/make current-level)
-   :number-input "?"
-   :init-time (clock/current-time-ms)})
+  (assoc state :guessing {:operation (operations/make current-level)
+                          :number-input "?"
+                          :level current-level
+                          :init-time (clock/current-time-ms)}))
 
 (defn- numeric? [c]
   (not (js/isNaN c)))
@@ -46,6 +46,12 @@
       (start-new-guessing state)
       (retry-current-guessing state))))
 
+(defn- check-input-number-new [state]
+  (let [state (history/record state)]
+    (if (correct-guess? (:guessing state))
+      (start-new-guessing-new state)
+      (assoc state :guessing (retry-current-guessing (:guessing state))))))
+
 (defn- return-pressed? [key-code]
   (= 13 key-code))
 
@@ -56,5 +62,5 @@
 
 (defn process-input-new [state key-code]
   (if (return-pressed? key-code)
-    (check-input-number state)
+    (check-input-number-new state)
     (add-char-new state (char key-code))))

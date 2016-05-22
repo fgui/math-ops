@@ -74,15 +74,16 @@
       (testing "operation guessing at start"
         (let [guessing (start-new-guessing-new {:current-level :max-level})]
           (is (= guessing {:current-level :max-level
-                           :operation new-operation
-                           :number-input "?"
-                           :init-time 10})))))
+                           :guessing {:operation new-operation
+                                      :number-input "?"
+                                      :level :max-level
+                                      :init-time 10}})))))
 
     (testing "processing user input"
       (testing "when not a number is pressed the state remains unaltered"
         (let [arbitrary-state {:guessing {:number-input "?"
                                           :operation :not-used-in-this-test
-                                          :current-level :not-used-in-this-test
+                                          :level :not-used-in-this-test
                                           :init-time :not-used-in-this-test}
                                :history :not-used-in-this-test}
               key-code-for-some-arbitrary-not-number 103
@@ -95,7 +96,7 @@
           (let [new-state (process-input-new
                             {:guessing {:number-input "?"
                                         :operation :not-used-in-this-test
-                                        :current-level :not-used-in-this-test
+                                        :level :not-used-in-this-test
                                         :init-time :not-used-in-this-test}
                              :history :not-used-in-this-test}
                             key-code-for-3)]
@@ -103,12 +104,39 @@
           (let [new-state (process-input-new
                             {:guessing {:number-input "56"
                                         :operation :not-used-in-this-test
-                                        :current-level :not-used-in-this-test
+                                        :level :not-used-in-this-test
                                         :init-time :not-used-in-this-test}
                              :history :not-used-in-this-test}
                             key-code-for-3)]
             (is (= (get-in new-state [:guessing :number-input]) "563")))))
 
-      )
+      (testing "when enter is pressed and the guess is wrong the guessing restarts keeping the same operation"
+        (let [key-code-for-enter 13
+              arbitrary-operation (operations/->Operation 14 - :? 9)
+              wrong-guess "8"
+              new-state (process-input-new
+                          {:guessing {:number-input wrong-guess
+                                      :operation arbitrary-operation
+                                      :level :not-used-in-this-test
+                                      :init-time :not-used-in-this-test}
+                           :history :not-used-in-this-test}
+                          key-code-for-enter)]
+          (is (= (get-in new-state [:guessing :operation]) arbitrary-operation))
+          (is (get-in new-state [:guessing :number-input]) "?")))
 
-    ))
+      (testing "when enter is pressed and the guess is right the guessing restarts with a new operation"
+        (let [key-code-for-enter 13
+              arbitrary-operation (operations/->Operation 8 + :? 9)
+              right-guess "1"
+              new-state (process-input-new
+                          {:guessing {:number-input right-guess
+                                      :operation arbitrary-operation
+                                      :level :max-level
+                                      :init-time :not-used-in-this-test}
+                           :current-level :max-level
+                           :history :not-used-in-this-test}
+                          key-code-for-enter)]
+          (is (= (get-in new-state [:guessing :operation]) new-operation))
+          (is (= (get-in new-state [:guessing :number-input]) "?"))
+          (is (= (get-in new-state [:guessing :level]) :max-level))
+          (is (= (get-in new-state [:current-level]) :max-level)))))))
