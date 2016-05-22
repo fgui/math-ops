@@ -17,7 +17,7 @@
             [lein-doo "0.1.6"]
             ]
 
-  :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
+  :clean-targets ^{:protect false} ["resources/public/js/compiled" "target" "out"]
 
   :figwheel {:css-dirs ["resources/public/css"]
              :open-file-command "open-in-editor"
