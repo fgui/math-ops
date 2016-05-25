@@ -6,17 +6,18 @@
 (re-frame/register-handler
   :initialize-state
   (fn [_ _]
-    (operations-guessing/start-new-guessing {:current-level :max-level})))
+    {:current-level :max-level
+     :guessing      (operations-guessing/start-new-guessing :max-level)}))
 
 (re-frame/register-handler
   :press-key
-  (fn [state [_ key-code]]
-    (operations-guessing/process-input state key-code)))
+  (fn [{:keys [guessing current-level] :as state} [_ key-code]]
+    (assoc state
+      :guessing (operations-guessing/process-input guessing current-level key-code))))
 
 (re-frame/register-handler
   :select-level
   (fn [state [_ key-level]]
-    (->
-      state
-      (assoc :current-level key-level)
-      operations-guessing/start-new-guessing)))
+    (-> state
+        (assoc :current-level key-level)
+        (assoc :guessing (operations-guessing/start-new-guessing key-level)))))
