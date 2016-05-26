@@ -4,10 +4,10 @@
     [math-ops.clock :as clock]))
 
 (defn start-new-guessing [current-level]
-  {:operation    (operations/make current-level)
+  {:operation (operations/make current-level)
    :number-input "?"
-   :level        current-level
-   :init-time    (clock/current-time-ms)})
+   :level current-level
+   :init-time (clock/current-time-ms)})
 
 (defn- numeric? [c]
   (not (js/isNaN c)))

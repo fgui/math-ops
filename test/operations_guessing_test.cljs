@@ -22,17 +22,17 @@
     (testing "start"
       (testing "operation guessing at start"
         (let [guessing (start-new-guessing :max-level)]
-          (is (= guessing {:operation    new-operation
+          (is (= guessing {:operation new-operation
                            :number-input "?"
-                           :level        :max-level
-                           :init-time    10})))))
+                           :level :max-level
+                           :init-time 10})))))
 
     (testing "processing user input"
       (testing "when not a number is pressed the state remains unaltered"
         (let [guessing {:number-input "?"
-                        :operation    :not-used-in-this-test
-                        :level        :not-used-in-this-test
-                        :init-time    :not-used-in-this-test}
+                        :operation :not-used-in-this-test
+                        :level :not-used-in-this-test
+                        :init-time :not-used-in-this-test}
               current-level :max-level
               key-code-for-some-arbitrary-not-number 103
               new-guessing (process-input
@@ -47,19 +47,19 @@
               current-level :max-level]
           (let [new-guessing (process-input
                                {:number-input "?"
-                                :operation    :not-used-in-this-test
-                                :level        :not-used-in-this-test
-                                :init-time    :not-used-in-this-test}
+                                :operation :not-used-in-this-test
+                                :level :not-used-in-this-test
+                                :init-time :not-used-in-this-test}
                                current-level
                                key-code-for-3)]
             (is (= (get-in new-guessing [:number-input]) "3")))
           (let [new-guessing (process-input
-                            {:number-input "56"
-                             :operation    :not-used-in-this-test
-                             :level        :not-used-in-this-test
-                             :init-time    :not-used-in-this-test}
-                            current-level
-                            key-code-for-3)]
+                               {:number-input "56"
+                                :operation :not-used-in-this-test
+                                :level :not-used-in-this-test
+                                :init-time :not-used-in-this-test}
+                               current-level
+                               key-code-for-3)]
             (is (= (get-in new-guessing [:number-input]) "563")))))
 
       (testing "when enter is pressed and the guess is wrong the guessing restarts keeping the same operation"
@@ -68,12 +68,12 @@
               wrong-guess "8"
               current-level :max-level
               new-guessing (process-input
-                          {:number-input wrong-guess
-                           :operation    arbitrary-operation
-                           :level        :not-used-in-this-test
-                           :init-time    :not-used-in-this-test}
-                          current-level
-                          key-code-for-enter)]
+                             {:number-input wrong-guess
+                              :operation arbitrary-operation
+                              :level :not-used-in-this-test
+                              :init-time :not-used-in-this-test}
+                             current-level
+                             key-code-for-enter)]
           (is (= (get-in new-guessing [:operation]) arbitrary-operation))
           (is (get-in new-guessing [:number-input]) "?")))
 
@@ -83,12 +83,12 @@
               right-guess "1"
               current-level :max-level
               new-guessing (process-input
-                          {:number-input right-guess
-                           :operation    arbitrary-operation
-                           :level        :max-level
-                           :init-time    :not-used-in-this-test}
-                          current-level
-                          key-code-for-enter)]
+                             {:number-input right-guess
+                              :operation arbitrary-operation
+                              :level :max-level
+                              :init-time :not-used-in-this-test}
+                             current-level
+                             key-code-for-enter)]
           (is (= (get-in new-guessing [:operation]) new-operation))
           (is (= (get-in new-guessing [:number-input]) "?"))
           (is (= (get-in new-guessing [:level]) :max-level)))))))
