@@ -15,10 +15,9 @@
   :press-key
   (fn [{:keys [history guessing current-level] :as state} [_ key-code]]
     (let [new-guessing (operations-guessing/process-input guessing current-level key-code)]
-      (merge
-        state
-        {:history (history/record guessing new-guessing history)
-         :guessing new-guessing}))))
+      (-> state
+          (assoc :history (history/record guessing new-guessing history))
+          (assoc :guessing new-guessing)))))
 
 (re-frame/register-handler
   :select-level
@@ -26,4 +25,3 @@
     (-> state
         (assoc :current-level key-level)
         (assoc :guessing (operations-guessing/start-new-guessing key-level)))))
-
