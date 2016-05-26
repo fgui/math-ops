@@ -1,34 +1,24 @@
 (ns math-ops.handlers
   (:require
     [re-frame.core :as re-frame]
-    [math-ops.operations-guessing :as operations-guessing]))
+    [math-ops.operations-guessing :as operations-guessing]
+    [math-ops.history :as history]))
 
 (re-frame/register-handler
   :initialize-state
   (fn [_ _]
     {:current-level :max-level
-     :guessing      (operations-guessing/start-new-guessing :max-level)
-     :history       []}))
-
-(defn success-or-failure?
-  [{current-guessing-input :number-input}
-   {new-guessing-input :number-input}]
-  (and
-    (not= current-guessing-input "?")
-    (= new-guessing-input "?")))
+     :guessing (operations-guessing/start-new-guessing :max-level)
+     :history []}))
 
 (re-frame/register-handler
   :press-key
   (fn [{:keys [history guessing current-level] :as state} [_ key-code]]
-    (let [current-guessing (:guessing state)
-          new-guessing (operations-guessing/process-input guessing current-level key-code)]
-      (assoc
-        (assoc state :history (if (success-or-failure? current-guessing new-guessing)
-                                (conj history current-guessing)
-                                history))
-        :guessing
-
-        new-guessing))))
+    (let [new-guessing (operations-guessing/process-input guessing current-level key-code)]
+      (merge
+        state
+        {:history (history/record guessing new-guessing history)
+         :guessing new-guessing}))))
 
 (re-frame/register-handler
   :select-level
