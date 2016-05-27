@@ -36,7 +36,7 @@
                  []))))))
 
   (testing "not recording a guessing"
-    (testing "in any other case case of success"
+    (testing "in any other case"
       (let [initial-history []
             current-guessing {:operation :not-used-in-test
                               :number-input "40"
