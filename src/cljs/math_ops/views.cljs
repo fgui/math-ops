@@ -36,16 +36,23 @@
       (display-unknown-symbol)
       (display-known-symbol k display-value))))
 
-(defn display [{:keys [op1 op2 operator res]}]
+(defn display-operation [{:keys [op1 op2 operator res]}]
   [:div
    (map display-symbol
         [:op1 :operator :op2 :equal-symbol :res]
         [op1 operator op2 "=" res])])
 
+(defn history-display-component []
+  (let [history (re-frame/subscribe [:history])]
+    (fn []
+      (println "history")
+      [:div (map #(display-operation (:operation %)) @history)])))
+
 (defn main-panel []
   (let [operation (re-frame/subscribe [:operation])]
     (fn []
       [:div
-       (display @operation)
+       (display-operation @operation)
        [level-component]
-       [level-selection-component]])))
+       [level-selection-component]
+       [history-display-component]])))

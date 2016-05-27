@@ -13,3 +13,4 @@
 (react-to :operation [:guessing :operation])
 (react-to :number-input [:guessing :number-input])
 (react-to :current-level)
+(react-to :history)
