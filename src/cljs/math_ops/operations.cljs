@@ -11,7 +11,12 @@
    :? "?"})
 
 (defn- operation->string [{:keys [op1 operator op2 res]}]
-  (string/join " " ["#Operation [" op1 (symbols-description operator) op2 "=" res "]"]))
+  (str "#operation \""
+       (pr-str {:op1 op1
+                :operator (symbols-description operator)
+                :op2 op2
+                :res res})
+       "\""))
 
 (defrecord Operation [op1 operator op2 res]
   Object
