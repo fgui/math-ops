@@ -1,19 +1,25 @@
 (ns math-ops.operations
   (:require
     [math-ops.game-levels :as levels]
-    [clojure.string :as string]))
+    [clojure.string :as string]
+    [clojure.set :refer [map-invert]]))
+
+(def ^:private symbols-keyword
+  {+ :+
+   - :-
+   * :x
+   / :/
+   :? :?})
 
 (def symbols-description
-  {+ "+"
-   - "-"
-   * "x"
-   / "/"
-   :? "?"})
+  (into {} (map (fn [[k v]] [k (name v)]) symbols-keyword)))
+
+(def ^:private keyword-symbols (map-invert symbols-keyword))
 
 (defn- operation->string [{:keys [op1 operator op2 res]}]
   (str "#operation \""
        (pr-str {:op1 op1
-                :operator (symbols-description operator)
+                :operator (symbols-keyword operator)
                 :op2 op2
                 :res res})
        "\""))
@@ -26,6 +32,10 @@
   Operation
   (-pr-writer [this writer _]
     (-write writer (operation->string this))))
+
+(defn read-operation
+  [{:keys [op1 operator op2 res]}]
+  (->Operation op1 (keyword-symbols operator) op2 res))
 
 (defn- hide-sth [operation]
   (assoc operation (rand-nth [:op1 :op2 :res]) :?))

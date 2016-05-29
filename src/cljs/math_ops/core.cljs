@@ -20,7 +20,16 @@
 (defn listen-key-press []
   (.addEventListener js/document "keypress" on-key-press))
 
+(defn read-operation [o]
+  (let [values (cljs.reader/read-string o)]
+    (math-ops.operations/read-operation values)))
+
+(defn register-reader-operation []
+  (println "registes-reader")
+  (cljs.reader/register-tag-parser! "operation" read-operation))
+
 (defn ^:export init []
+  (register-reader-operation)
   (re-frame/dispatch-sync [:initialize-state])
   (listen-key-press)
   (mount-root))
