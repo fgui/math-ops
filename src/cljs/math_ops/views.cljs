@@ -2,7 +2,11 @@
   (:require
     [math-ops.game-levels :as game-levels]
     [re-frame.core :as re-frame]
-    [math-ops.operations :refer [symbols-description correct-guess?]]))
+    [math-ops.operations :refer [symbols-description correct-guess?]])
+  )
+
+(defn with-key [k component]
+  (with-meta component {:key k}))
 
 (defn unknow-component []
   (let [number-input (re-frame/subscribe [:number-input])]
@@ -16,7 +20,7 @@
       [:div (str "level: " (game-levels/name @current-level))])))
 
 (defn level-selector [[k description]]
-  ^{:key k} [:a {:on-click #(re-frame/dispatch [:select-level k])} description])
+  (with-key k [:a {:on-click #(re-frame/dispatch [:select-level k])} description]))
 
 (defn seq-join [separator coll]
   (drop 1 (interleave (repeat separator) coll)))
@@ -25,15 +29,15 @@
   [:div (seq-join \space (map level-selector (game-levels/available-levels)))])
 
 (defn display-known-symbol [k display-value]
-  ^{:key k} [:span.known {:style {:margin "5px"}} display-value])
+  (with-key k [:span.known {:style {:margin "5px"}} display-value]))
 
-(defn display-unknown-symbol [k]
-  ^{:key :unknown-symbol} [unknow-component])
+(defn display-unknown-symbol [_]
+  (with-key :unknown-symbol [unknow-component]))
 
 (defn make-display-answer-symbol [answer]
   (fn [k]
-    ^{:key k} [:span.known {:style {:margin "5px"
-                                    :font-weight :bold}} answer]))
+    (with-key k [:span.known {:style {:margin "5px"
+                                      :font-weight :bold}} answer])))
 
 (defn display-symbol [k s f-display-unknown-symbol]
   (let [display-value (get symbols-description s s)]
