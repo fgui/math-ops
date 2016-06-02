@@ -5,12 +5,19 @@
    [math-ops.history :as history]
    [hodgepodge.core :refer [local-storage]]))
 
-(defn state->storage [state]
-  (assoc! local-storage :math-ops-state state)
-  state)
+(defn state->storage! [state]
+  (assoc! local-storage :math-ops-state state))
 
 (defn storage->state []
   (get local-storage :math-ops-state))
+
+(defn store-middleware [handler]
+  (fn [state b]
+    (let [new-state (handler state b)]
+      (print "in middleware")
+      (state->storage! new-state)
+      new-state)
+    ))
 
 (re-frame/register-handler
  :initialize-state
@@ -22,6 +29,7 @@
 
 (re-frame/register-handler
  :press-key
+ store-middleware
  (fn [{:keys [history guessing current-level] :as state} [_ key-code]]
    (let [new-guessing (operations-guessing/process-input guessing current-level key-code)]
      (-> state

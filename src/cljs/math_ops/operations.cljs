@@ -8,11 +8,11 @@
   {+ :+
    - :-
    * :x
-   / :/
+   / :div
    :? :?})
 
 (def symbols-description
-  (into {} (map (fn [[k v]] [k (name v)]) symbols-keyword)))
+  (into {} (map (fn [[k v]] [k (if (= k /) "/" (name v))]) symbols-keyword)))
 
 (def ^:private keyword-symbols (map-invert symbols-keyword))
 
@@ -35,6 +35,8 @@
 
 (defn read-operation
   [{:keys [op1 operator op2 res]}]
+  (println operator)
+  (println (keyword-symbols operator))
   (->Operation op1 (keyword-symbols operator) op2 res))
 
 (defn- hide-sth [operation]
