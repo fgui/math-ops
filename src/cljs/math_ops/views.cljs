@@ -52,7 +52,7 @@
         [op1 operator op2 "=" res])])
 
 (defn display-guessing-result [idx {:keys [operation number-input]}]
-  (let [correct? (correct-guess? operation number-input)]
+  (let [correct? (correct-guess? operation (js/parseInt number-input))]
     ;; TODO color with css
     (with-key idx
       [:div {:style {:color (if correct? :green :red)}}
