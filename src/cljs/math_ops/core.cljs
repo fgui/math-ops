@@ -25,7 +25,6 @@
     (math-ops.operations/read-operation values)))
 
 (defn register-reader-operation []
-  (println "registes-reader")
   (cljs.reader/register-tag-parser! "operation" read-operation))
 
 (defn ^:export init []

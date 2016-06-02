@@ -1,9 +1,8 @@
 (ns math-ops.views
   (:require
-    [math-ops.game-levels :as game-levels]
-    [re-frame.core :as re-frame]
-    [math-ops.operations :refer [symbols-description correct-guess?]])
-  )
+   [math-ops.game-levels :as game-levels]
+   [re-frame.core :as re-frame]
+   [math-ops.operations :refer [symbols-description correct-guess?]]))
 
 (defn with-key [k component]
   (with-meta component {:key k}))
@@ -52,18 +51,18 @@
         [:op1 :operator :op2 :equal-symbol :res]
         [op1 operator op2 "=" res])])
 
-(defn display-guessing-result [{:keys [operation number-input]}]
+(defn display-guessing-result [idx {:keys [operation number-input]}]
   (let [correct? (correct-guess? operation number-input)]
     ;; TODO color with css
-    [:div {:style {:color (if correct? :green :red)}}
-     (display-operation operation
-                        (make-display-answer-symbol number-input))]))
+    (with-key idx
+      [:div {:style {:color (if correct? :green :red)}}
+       (display-operation operation
+                          (make-display-answer-symbol number-input))])))
 
 (defn history-display-component []
   (let [history (re-frame/subscribe [:history])]
     (fn []
-      (println "history")
-      [:div (map display-guessing-result @history)])))
+      [:div (map-indexed display-guessing-result @history)])))
 
 (defn main-panel []
   (let [operation (re-frame/subscribe [:operation])]
