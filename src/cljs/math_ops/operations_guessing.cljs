@@ -1,7 +1,8 @@
 (ns math-ops.operations-guessing
   (:require
     [math-ops.operations :as operations]
-    [math-ops.clock :as clock]))
+    [math-ops.clock :as clock]
+    [math-ops.keyboard :as keyboard]))
 
 (defn start-new-guessing [current-level]
   {:operation (operations/make current-level)
@@ -31,10 +32,7 @@
     (start-new-guessing current-level)
     (retry-current-guessing guessing)))
 
-(defn- return-pressed? [key-code]
-  (= 13 key-code))
-
 (defn process-input [guessing current-level key-code]
-  (if (return-pressed? key-code)
+  (if (keyboard/return-pressed? key-code)
     (check-input-number guessing current-level)
     (add-char guessing (char key-code))))

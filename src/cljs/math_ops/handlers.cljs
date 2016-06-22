@@ -3,7 +3,8 @@
     [re-frame.core :as re-frame]
     [math-ops.operations-guessing :as operations-guessing]
     [math-ops.history :as history]
-    [hodgepodge.core :refer [local-storage]]))
+    [hodgepodge.core :refer [local-storage]]
+    [math-ops.keyboard :as keyboard]))
 
 (defn state->storage! [state]
   (assoc! local-storage :math-ops-state state))
@@ -11,15 +12,12 @@
 (defn storage->state []
   (get local-storage :math-ops-state))
 
-(defn- return-pressed? [key-code]
-  (= 13 key-code))
-
 (defmulti should-store?
           (fn [[event-type _]]
             event-type))
 
 (defmethod should-store? :press-key [[_ key-code]]
-  (return-pressed? key-code))
+  (keyboard/return-pressed? key-code))
 
 (defmethod should-store? :default [_]
   true)
