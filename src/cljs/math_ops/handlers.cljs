@@ -38,6 +38,7 @@
 
 (re-frame/register-handler
  :select-level
+ store-middleware
  (fn [state [_ key-level]]
    (-> state
        (assoc :current-level key-level)
