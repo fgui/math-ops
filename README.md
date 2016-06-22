@@ -32,11 +32,15 @@ lein doo node unit-tests
 
 ## TODO
 
+- Clean handlers
+
+- Del key should delete last number entered
+
+## Wishlist
+
 - Make it work offline
 
 - Represent numbers as dots (images or SVG) for initial level (Spike!)
-
-- Store state between uses in local (local storage, cookies, etc)
 
 - Scores
 
