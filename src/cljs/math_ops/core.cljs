@@ -28,6 +28,7 @@
   (cljs.reader/register-tag-parser! "operation" read-operation))
 
 (defn ^:export init []
+  (math-ops.storage/use-local-storage!)
   (register-reader-operation)
   (re-frame/dispatch-sync [:initialize-state])
   (listen-key-press)

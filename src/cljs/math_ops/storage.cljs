@@ -2,6 +2,8 @@
   (:require
    [hodgepodge.core :refer [local-storage]]))
 
+(def storage (atom nil))
+
 (defprotocol Storage
   (save-state! [this state])
   (retrieve-state [this]))
@@ -13,9 +15,7 @@
   (retrieve-state [_]
     (get local-storage :math-ops-state)))
 
-(def storage (atom (->LocalStorage)))
-
-(defn use-local-storage []
+(defn use-local-storage! []
   (reset! storage (->LocalStorage)))
 
 (defn state->storage! [state]
