@@ -3,14 +3,8 @@
     [re-frame.core :as re-frame]
     [math-ops.operations-guessing :as operations-guessing]
     [math-ops.history :as history]
-    [hodgepodge.core :refer [local-storage]]
+    [math-ops.storage :as storage]
     [math-ops.keyboard :as keyboard]))
-
-(defn state->storage! [state]
-  (assoc! local-storage :math-ops-state state))
-
-(defn storage->state []
-  (get local-storage :math-ops-state))
 
 (defmulti should-store?
           (fn [[event-type _]]
@@ -26,7 +20,7 @@
   (fn [state event]
     (let [new-state (handler state event)]
       (when (should-store? event)
-        (state->storage! new-state))
+        (storage/state->storage! new-state))
       new-state)))
 
 (re-frame/register-handler
@@ -35,7 +29,7 @@
     (merge {:current-level :max-level
             :guessing (operations-guessing/start-new-guessing :max-level)
             :history []}
-           (storage->state))))
+           (storage/storage->state))))
 
 (re-frame/register-handler
   :press-key
