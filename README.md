@@ -32,11 +32,7 @@ lein doo node unit-tests
 
 ## TODO
 
-- Fix issues with FF and other explorers.
-
 - Clean handlers
-
-- Del key should delete last number entered
 
 ## Wishlist
 
