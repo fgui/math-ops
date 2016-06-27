@@ -12,23 +12,20 @@
   (println "dev mode"))
 
 (defn on-key-down [event]
-  (if (keyboard/backspace-pressed? (keyboard/key-code event))
-    (if (= (.-body js/document) (.-target event))
-      (do (.preventDefault event)
-          (re-frame/dispatch
-            [:press-key (keyboard/key-code event)])))))
+  (let [key-code (keyboard/key-code event)]
+    (if (keyboard/backspace-pressed? key-code)
+      (if (= (.-body js/document) (.-target event))
+        (do (.preventDefault event)
+            (re-frame/dispatch [:press-key key-code]))))))
 
 (defn on-key-press [event]
   (re-frame/dispatch
     [:press-key (keyboard/key-code event)]))
 
 (defn mount-root []
-  (reagent/render [views/main-panel]
-                  (.getElementById js/document "app")))
-
-(defn listen-key-press []
-  (.addEventListener
-    js/document "keypress" on-key-press))
+  (reagent/render
+    [views/main-panel]
+    (.getElementById js/document "app")))
 
 (defn read-operation [o]
   (let [values (cljs.reader/read-string o)]
@@ -41,6 +38,6 @@
   (math-ops.storage/use-local-storage!)
   (register-reader-operation)
   (re-frame/dispatch-sync [:initialize-state])
-  (listen-key-press)
+  (.addEventListener js/document "keypress" on-key-press)
   (.addEventListener js/document "keydown" on-key-down)
   (mount-root))
