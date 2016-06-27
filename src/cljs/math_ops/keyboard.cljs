@@ -3,6 +3,9 @@
 (defn return-pressed? [key-code]
   (= 13 key-code))
 
+(defn backspace-pressed? [key-code]
+  (= 8 key-code))
+
 (defn key-code [event]
   (let [key-code (.-keyCode event)]
     (if (zero? key-code)

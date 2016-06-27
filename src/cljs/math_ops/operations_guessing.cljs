@@ -21,6 +21,13 @@
       (apply str (remove #{"?"} (str (:number-input guessing) c))))
     guessing))
 
+(defn remove-last-char [guessing]
+  (let [res (apply str (butlast (:number-input guessing)))]
+    (assoc
+      guessing
+      :number-input
+      (if (= "" res) "?" res))))
+
 (defn- correct-guess? [{:keys [operation number-input]}]
   (operations/correct-guess? operation (int number-input)))
 
@@ -33,6 +40,11 @@
     (retry-current-guessing guessing)))
 
 (defn process-input [guessing current-level key-code]
-  (if (keyboard/return-pressed? key-code)
-    (check-input-number guessing current-level)
-    (add-char guessing (char key-code))))
+  (cond (keyboard/return-pressed? key-code)
+        (check-input-number guessing current-level)
+
+        (keyboard/backspace-pressed? key-code)
+        (remove-last-char guessing)
+
+        :else
+        (add-char guessing (char key-code))))

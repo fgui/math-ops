@@ -11,6 +11,13 @@
 (when config/debug?
   (println "dev mode"))
 
+(defn on-key-down [event]
+  (if (keyboard/backspace-pressed? (keyboard/key-code event))
+    (if (= (.-body js/document) (.-target event))
+      (do (.preventDefault event)
+          (re-frame/dispatch
+            [:press-key (keyboard/key-code event)])))))
+
 (defn on-key-press [event]
   (re-frame/dispatch
     [:press-key (keyboard/key-code event)]))
@@ -35,4 +42,5 @@
   (register-reader-operation)
   (re-frame/dispatch-sync [:initialize-state])
   (listen-key-press)
+  (.addEventListener js/document "keydown" on-key-down)
   (mount-root))
