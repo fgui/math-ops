@@ -1,7 +1,6 @@
 (ns math-ops.operations
   (:require
     [math-ops.game-levels :as levels]
-    [clojure.string :as string]
     [clojure.set :refer [map-invert]]))
 
 (def ^:private symbols-keyword
@@ -35,8 +34,6 @@
 
 (defn read-operation
   [{:keys [op1 operator op2 res]}]
-  (println operator)
-  (println (keyword-symbols operator))
   (->Operation op1 (keyword-symbols operator) op2 res))
 
 (defn- hide-sth [operation]
