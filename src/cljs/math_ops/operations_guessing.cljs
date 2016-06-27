@@ -2,7 +2,8 @@
   (:require
     [math-ops.operations :as operations]
     [math-ops.clock :as clock]
-    [math-ops.keyboard :as keyboard]))
+    [math-ops.keyboard :as keyboard]
+    [clojure.string :as string]))
 
 (defn start-new-guessing [current-level]
   {:operation (operations/make current-level)
@@ -15,18 +16,14 @@
 
 (defn- add-char [guessing c]
   (if (numeric? c)
-    (assoc
-      guessing
-      :number-input
-      (apply str (remove #{"?"} (str (:number-input guessing) c))))
+    (let [number-input
+          (apply str (remove #{"?"} (str (:number-input guessing) c)))]
+      (assoc guessing :number-input number-input))
     guessing))
 
 (defn- remove-last-char [guessing]
-  (let [res (apply str (butlast (:number-input guessing)))]
-    (assoc
-      guessing
-      :number-input
-      (if (= "" res) "?" res))))
+  (let [number-input (apply str (butlast (:number-input guessing)))]
+    (assoc guessing :number-input number-input)))
 
 (defn- correct-guess? [{:keys [operation number-input]}]
   (operations/correct-guess? operation (int number-input)))
@@ -34,10 +31,12 @@
 (defn- retry-current-guessing [guessing]
   (assoc guessing :number-input "?"))
 
-(defn- check-guess [guessing current-level]
-  (if (correct-guess? guessing)
-    (start-new-guessing current-level)
-    (retry-current-guessing guessing)))
+(defn- check-guess [{:keys [number-input] :as guessing} current-level]
+  (if (string/blank? number-input)
+    guessing
+    (if (correct-guess? guessing)
+      (start-new-guessing current-level)
+      (retry-current-guessing guessing))))
 
 (defn process-input [guessing current-level key-code]
   (cond
