@@ -13,7 +13,7 @@
 (defn- numeric? [c]
   (not (js/isNaN c)))
 
-(defn add-char [guessing c]
+(defn- add-char [guessing c]
   (if (numeric? c)
     (assoc
       guessing
@@ -21,7 +21,7 @@
       (apply str (remove #{"?"} (str (:number-input guessing) c))))
     guessing))
 
-(defn remove-last-char [guessing]
+(defn- remove-last-char [guessing]
   (let [res (apply str (butlast (:number-input guessing)))]
     (assoc
       guessing
@@ -34,17 +34,18 @@
 (defn- retry-current-guessing [guessing]
   (assoc guessing :number-input "?"))
 
-(defn- check-input-number [guessing current-level]
+(defn- check-guess [guessing current-level]
   (if (correct-guess? guessing)
     (start-new-guessing current-level)
     (retry-current-guessing guessing)))
 
 (defn process-input [guessing current-level key-code]
-  (cond (keyboard/return-pressed? key-code)
-        (check-input-number guessing current-level)
+  (cond
+    (keyboard/return-pressed? key-code)
+    (check-guess guessing current-level)
 
-        (keyboard/backspace-pressed? key-code)
-        (remove-last-char guessing)
+    (keyboard/backspace-pressed? key-code)
+    (remove-last-char guessing)
 
-        :else
-        (add-char guessing (char key-code))))
+    :else
+    (add-char guessing (char key-code))))
