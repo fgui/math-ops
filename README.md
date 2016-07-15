@@ -36,13 +36,15 @@ lein doo node unit-tests
 
 ## Wishlist
 
-- Make it work offline
-
-- Represent numbers as dots (images or SVG) for initial level (Spike!)
+- Deploy on github pages
 
 - Scores
 
 - Make it pretty
+
+- Make it work offline
+
+- Represent numbers as dots (images or SVG) for initial level (Spike!)
 
 - React Native version
 
