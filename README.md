@@ -3,6 +3,10 @@
 A [re-frame](https://github.com/Day8/re-frame) game
 to learn basic math operations while having fun.
 
+## Live version
+
+https://fgui.github.io/math-ops/
+
 ## Development Mode
 
 ### Run application:
@@ -35,8 +39,6 @@ lein doo node unit-tests
 - Clean handlers
 
 ## Wishlist
-
-- Deploy on github pages
 
 - Scores
 
