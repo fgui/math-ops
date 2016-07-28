@@ -3,37 +3,23 @@
     [re-frame.core :as re-frame]
     [math-ops.operations-guessing :as operations-guessing]
     [math-ops.history :as history]
-    [math-ops.storage :as storage]
-    [math-ops.keyboard :as keyboard]))
+    [math-ops.state-storing :as state-storing]))
 
-(defmulti should-store?
-          (fn [[event-type _]]
-            event-type))
-
-(defmethod should-store? :press-key [[_ key-code]]
-  (keyboard/return-pressed? key-code))
-
-(defmethod should-store? :default [_]
-  true)
-
-(defn store-middleware [handler]
-  (fn [state event]
-    (let [new-state (handler state event)]
-      (when (should-store? event)
-        (storage/state->storage! new-state))
-      new-state)))
+(defn- initialize-state []
+  {:current-level :max-level
+   :guessing (operations-guessing/start-new-guessing :max-level)
+   :history []})
 
 (re-frame/register-handler
   :initialize-state
   (fn [_ _]
-    (merge {:current-level :max-level
-            :guessing (operations-guessing/start-new-guessing :max-level)
-            :history []}
-           (storage/storage->state))))
+    (if-let [stored-state (state-storing/load-state)]
+      stored-state
+      (initialize-state))))
 
 (re-frame/register-handler
   :press-key
-  store-middleware
+  state-storing/middleware
   (fn [{:keys [history guessing current-level] :as state} [_ key-code]]
     (let [new-guessing (operations-guessing/process-input guessing current-level key-code)]
       (-> state
@@ -42,8 +28,8 @@
 
 (re-frame/register-handler
   :select-level
-  store-middleware
-  (fn [state [_ key-level]]
+  state-storing/middleware
+  (fn [state [_ new-level]]
     (-> state
-        (assoc :current-level key-level)
-        (assoc :guessing (operations-guessing/start-new-guessing key-level)))))
+        (assoc :current-level new-level)
+        (assoc :guessing (operations-guessing/start-new-guessing new-level)))))

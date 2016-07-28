@@ -32,11 +32,8 @@ lein doo node unit-tests
 
 ## TODO
 
-- Clean handlers
 
 ## Wishlist
-
-- Deploy on github pages
 
 - Scores
 
