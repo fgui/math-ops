@@ -3,6 +3,20 @@
 A [re-frame](https://github.com/Day8/re-frame) game
 to learn basic math operations while having fun.
 
+## Live version
+
+https://fgui.github.io/math-ops/
+
+### Deployment
+
+To deploy to github pages execute:
+
+```
+./scripts/gh-pages-deploy.sh
+```
+
+We followed this [guide to deploy only a subdirectory to github pages](https://gist.github.com/cobyism/4730490)
+
 ## Development Mode
 
 ### Run application:
