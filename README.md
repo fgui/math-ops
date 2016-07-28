@@ -46,6 +46,7 @@ lein doo node unit-tests
 
 ## TODO
 
+- Separate dev and production build targets
 
 ## Wishlist
 
