@@ -10,21 +10,16 @@
   :min-lein-version "2.5.3"
 
   :source-paths ["src/clj"
-                 "script"
-                 ]
+                 "script"]
 
   :plugins [[lein-cljsbuild "1.1.1"]
-            ;;[lein-figwheel "0.5.0-2"]
-            [lein-doo "0.1.6"]
-            ]
+            [lein-doo "0.1.6"]]
 
-  :profiles {
-             :deployment {:clean-targets ^{:protect false} ["resources/deploy"]}
+  :profiles {:deployment {:clean-targets ^{:protect false} ["resources/deploy"]}
              :dev {:clean-targets ^{:protect false} ["resources/public/js" "target" "out"]}}
 
   :figwheel {:css-dirs ["resources/public/css"]
-             :open-file-command "open-in-editor"
-             }
+             :open-file-command "open-in-editor"}
 
   :cljsbuild {:builds [{:id "dev"
                         :source-paths ["src/cljs"]
@@ -48,8 +43,6 @@
                         :compiler {:output-to "out/unit_tests.js"
                                    :main 'math-ops.unit-tests
                                    :target :nodejs
-                                   :optimizations :none}}
-                       ]
-              }
+                                   :optimizations :none}}]}
 
   :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]})
