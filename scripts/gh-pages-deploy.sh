@@ -1,6 +1,7 @@
 #!/bin/sh
-lein clean
+lein with-profile deployment clean
 lein cljsbuild once min
-git add resources/public
+cp resources/public/index.html resources/deploy/index.html
+git add resources/deploy
 git commit -m 'new deployment'
-git subtree push --prefix resources/public origin gh-pages
+git subtree push --prefix resources/deploy origin gh-pages

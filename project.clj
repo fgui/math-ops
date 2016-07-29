@@ -18,7 +18,11 @@
             [lein-doo "0.1.6"]
             ]
 
-  :clean-targets ^{:protect false} ["resources/public/js/compiled" "target" "out"]
+  :profiles {
+             :deployment {:clean-targets ^{:protect false} ["resources/deploy"]}
+             :dev {:clean-targets ^{:protect false} ["resources/public/js/compiled" "target" "out"]}}
+
+  ;:clean-targets ^{:protect false} ["resources/public/js/compiled" "target" "out"]
 
   :figwheel {:css-dirs ["resources/public/css"]
              :open-file-command "open-in-editor"
@@ -36,7 +40,7 @@
                        {:id "min"
                         :source-paths ["src/cljs"]
                         :compiler {:main math-ops.core
-                                   :output-to "resources/public/js/compiled/app.js"
+                                   :output-to "resources/deploy/js/compiled/app.js"
                                    :optimizations :advanced
                                    :closure-defines {goog.DEBUG false}
                                    :pretty-print false}}
