@@ -22,8 +22,6 @@
              :deployment {:clean-targets ^{:protect false} ["resources/deploy"]}
              :dev {:clean-targets ^{:protect false} ["resources/public/js" "target" "out"]}}
 
-  ;:clean-targets ^{:protect false} ["resources/public/js/compiled" "target" "out"]
-
   :figwheel {:css-dirs ["resources/public/css"]
              :open-file-command "open-in-editor"
              }
