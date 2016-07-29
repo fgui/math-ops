@@ -20,7 +20,7 @@
 
   :profiles {
              :deployment {:clean-targets ^{:protect false} ["resources/deploy"]}
-             :dev {:clean-targets ^{:protect false} ["resources/public/js/compiled" "target" "out"]}}
+             :dev {:clean-targets ^{:protect false} ["resources/public/js" "target" "out"]}}
 
   ;:clean-targets ^{:protect false} ["resources/public/js/compiled" "target" "out"]
 
